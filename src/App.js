@@ -4,7 +4,7 @@ import Expenses from "./components/expenses/expenses";
 
 function App() {
   return (
-    <div>
+    <div className=" bg-black text-white">
       <h1>Hello</h1>
       <Dashboard />
       <Expenses />

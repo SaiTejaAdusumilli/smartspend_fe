@@ -1,19 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Dashboard() {
-  const [income, setIncome] = useState(800.0);
-  //   const [expenses, setExpenses] = useState(200.0);
-  const expenses = 200.0;
+  const [income, setIncome] = useState();
+  const [expenses, setExpenses] = useState();
+  const [balance, setBalance] = useState();
+  const [incomeData, setIncomeData] = useState([]);
 
-  const [balance, setBalance] = useState(income - expenses);
   const [incomeHover, setIncomeHover] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const apiData = await fetch("http://127.0.0.1:8000/api/income/get/");
+      const jsonData = await apiData.json();
+      setIncomeData(jsonData);
+      setIncome(jsonData?.income);
+      var month = jsonData?.month;
+      setExpenses(jsonData?.total_month_expenses);
+      setBalance(jsonData?.income - jsonData?.total_month_expenses);
+    };
+    fetchData();
+  }, []);
 
   return (
     <div>
       <label>Current income: </label>
       <input
         type="text"
-        className="border rounded w-28"
+        className="border rounded w-28 text-black"
         value={`${income}`}
         onChange={(e) => {
           setIncome(e.target.value);
